@@ -8,6 +8,7 @@
 
 namespace ESD\Plugins\Validate\Annotation;
 
+use DI\DependencyException;
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\CachedReader;
 use ESD\BaseServer\Server\Server;
@@ -99,10 +100,27 @@ class Validated extends Annotation
      * @param ReflectionClass $reflectionClass
      * @param $values
      * @throws ValidationException
-     * @throws \DI\DependencyException
+     * @throws DependencyException
      * @throws \DI\NotFoundException
      */
     public static function valid(ReflectionClass $reflectionClass, $values)
+    {
+        $validRole = self::buildRole($reflectionClass);
+        if (!empty($validRole)) {
+            $validation = Validation::check($values, $validRole);
+            if ($validation->failed()) {
+                throw new ValidationException($validation->firstError());
+            }
+        }
+    }
+
+    /**
+     * @param ReflectionClass $reflectionClass
+     * @return array
+     * @throws DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public static function buildRole(ReflectionClass $reflectionClass)
     {
         $validRole = [];
         foreach ($reflectionClass->getProperties() as $property) {
@@ -113,11 +131,6 @@ class Validated extends Annotation
                 }
             }
         }
-        if (!empty($validRole)) {
-            $validation = Validation::check($values, $validRole);
-            if ($validation->failed()) {
-                throw new ValidationException($validation->firstError());
-            }
-        }
+        return $validRole;
     }
 }
