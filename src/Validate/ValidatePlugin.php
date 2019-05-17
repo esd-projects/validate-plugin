@@ -11,6 +11,7 @@ namespace ESD\Plugins\Validate;
 
 use ESD\BaseServer\Server\Context;
 use ESD\BaseServer\Server\PlugIn\AbstractPlugin;
+use ESD\BaseServer\Server\PlugIn\PluginInterfaceManager;
 use ESD\Plugins\AnnotationsScan\AnnotationsScanPlugin;
 
 class ValidatePlugin extends AbstractPlugin
@@ -20,6 +21,19 @@ class ValidatePlugin extends AbstractPlugin
     {
         parent::__construct();
         $this->atAfter(AnnotationsScanPlugin::class);
+    }
+
+    /**
+     * @param PluginInterfaceManager $pluginInterfaceManager
+     * @return mixed|void
+     * @throws \DI\DependencyException
+     * @throws \ESD\BaseServer\Exception
+     * @throws \ReflectionException
+     */
+    public function onAdded(PluginInterfaceManager $pluginInterfaceManager)
+    {
+        parent::onAdded($pluginInterfaceManager);
+        $pluginInterfaceManager->addPlug(new AnnotationsScanPlugin());
     }
 
     /**
