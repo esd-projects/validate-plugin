@@ -13,10 +13,15 @@ use ESD\BaseServer\Server\Context;
 use ESD\BaseServer\Server\PlugIn\AbstractPlugin;
 use ESD\BaseServer\Server\PlugIn\PluginInterfaceManager;
 use ESD\Plugins\AnnotationsScan\AnnotationsScanPlugin;
+use ESD\Plugins\Validate\Annotation\Validated;
 
 class ValidatePlugin extends AbstractPlugin
 {
-
+    /**
+     * @Validated()
+     * @var string
+     */
+    public $test;
     public function __construct()
     {
         parent::__construct();
