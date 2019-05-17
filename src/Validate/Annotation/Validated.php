@@ -295,10 +295,19 @@ class Validated extends Annotation
      */
     public $max;
 
+    /**
+     * 场景
+     * @var string
+     */
+    public $scene;
+
     public function build($name)
     {
         $result = [];
         foreach ($this as $key => $value) {
+            if ($key == "scene") {
+                continue;
+            }
             $one = [$name];
             if ($value === true) {
                 $one[] = $key;
@@ -307,6 +316,9 @@ class Validated extends Annotation
                 $one[] = $value;
             }
             if (count($one) > 1) {
+                if (!empty($this->scene)) {
+                    $one["on"] = $this->scene;
+                }
                 $result[] = $one;
             }
         }
@@ -316,16 +328,18 @@ class Validated extends Annotation
     /**
      * @param ReflectionClass|string $reflectionClass
      * @param $values
-     * @throws ValidationException
+     * @param array $translates
+     * @param string $scene
      * @throws DependencyException
+     * @throws ValidationException
      * @throws \DI\NotFoundException
      * @throws \ReflectionException
      */
-    public static function valid($reflectionClass, $values)
+    public static function valid($reflectionClass, $values, $translates = [], $scene = "")
     {
         $validRole = self::buildRole($reflectionClass);
         if (!empty($validRole)) {
-            $validation = Validation::check($values, $validRole);
+            $validation = Validation::check($values, $validRole, $translates, $scene);
             if ($validation->failed()) {
                 throw new ValidationException($validation->firstError());
             }
