@@ -24,6 +24,11 @@ use ReflectionClass;
 class Filter extends Annotation
 {
     /**
+     * 默认值
+     * @var mixed
+     */
+    public $default;
+    /**
      * 返回绝对值
      * @var bool
      */
@@ -163,7 +168,7 @@ class Filter extends Annotation
     {
         $filterRole = self::buildRole($reflectionClass);
         if (!empty($filterRole)) {
-            return Filtration::make($values, $filterRole)->filtering();
+            return Filtration::make($values, $filterRole)->filtering() + $values;
         } else {
             return $values;
         }

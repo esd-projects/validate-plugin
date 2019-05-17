@@ -104,7 +104,7 @@ class Validated extends Annotation
      */
     public $intList = false;
     /**
-     * 	验证字段值是否是一个 number list
+     *    验证字段值是否是一个 number list
      * @var bool
      */
     public $numList = false;
@@ -164,7 +164,7 @@ class Validated extends Annotation
      */
     public $macAddress = false;
     /**
-     * 	验证是否是 md5 格式的字符串
+     *    验证是否是 md5 格式的字符串
      * @var bool
      */
     public $md5 = false;
