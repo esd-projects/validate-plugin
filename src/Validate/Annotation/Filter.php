@@ -34,7 +34,7 @@ class Filter extends Annotation
      */
     public $abs = false;
     /**
-     * 过滤非法字符并转换为int类型 支持数组    ['userI
+     * 过滤非法字符并转换为int类型 支持数组
      * @var bool
      */
     public $integer = false;
