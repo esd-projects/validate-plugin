@@ -170,6 +170,16 @@ class Validated extends Annotation
      */
     public $md5 = false;
     /**
+     * 验证大小范围, 可以支持验证 int, string, array 数据类型,需要设置min，max
+     * @var bool
+     */
+    public $between = false;
+    /**
+     * 长度验证（ 跟 size差不多, 但只能验证 string, array 的长度,需要设置min，max
+     * @var bool
+     */
+    public $length = false;
+    /**
      * 验证是否是 sha1 格式的字符串
      * @var bool
      */
@@ -303,9 +313,16 @@ class Validated extends Annotation
 
     public function build($name)
     {
+        $noMinMax = false;
+        if ($this->string || $this->integer || $this->number || $this->between || $this->length) {
+            $noMinMax = true;
+        }
         $result = [];
         foreach ($this as $key => $value) {
             if ($key == "scene") {
+                continue;
+            }
+            if ($noMinMax && ($key == "min" || $key == "max")) {
                 continue;
             }
             $one = [$name];
@@ -316,6 +333,14 @@ class Validated extends Annotation
                 $one[] = $value;
             }
             if (count($one) > 1) {
+                if ($key == "string" || $key == "integer" || $key == "number" || $key == "between" || $key == "length") {
+                    if ($this->min != null) {
+                        $one["min"] = $this->min;
+                    }
+                    if ($this->max != null) {
+                        $one["max"] = $this->max;
+                    }
+                }
                 if (!empty($this->scene)) {
                     $one["on"] = $this->scene;
                 }
