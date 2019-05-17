@@ -23,6 +23,7 @@ use ReflectionClass;
  */
 class Validated extends Annotation
 {
+    protected static $cache = [];
     /**
      * 要求此字段/属性是必须的(不为空的)。
      * @var bool
@@ -338,6 +339,9 @@ class Validated extends Annotation
      */
     public static function buildRole(ReflectionClass $reflectionClass)
     {
+        if (array_key_exists($reflectionClass->name, self::$cache)) {
+            return self::$cache[$reflectionClass->name];
+        }
         $validRole = [];
         foreach ($reflectionClass->getProperties() as $property) {
             $validated = Server::$instance->getContainer()->get(CachedReader::class)->getPropertyAnnotation($property, Validated::class);
@@ -347,6 +351,7 @@ class Validated extends Annotation
                 }
             }
         }
+        self::$cache[$reflectionClass->name] = $validRole;
         return $validRole;
     }
 }

@@ -23,6 +23,7 @@ use ReflectionClass;
  */
 class Filter extends Annotation
 {
+    protected static $cache = [];
     /**
      * 默认值
      * @var mixed
@@ -185,6 +186,9 @@ class Filter extends Annotation
      */
     public static function buildRole(ReflectionClass $reflectionClass)
     {
+        if (array_key_exists($reflectionClass->name, self::$cache)) {
+            return self::$cache[$reflectionClass->name];
+        }
         $filterRole = [];
         foreach ($reflectionClass->getProperties() as $property) {
             $filter = Server::$instance->getContainer()->get(CachedReader::class)->getPropertyAnnotation($property, Filter::class);
@@ -195,6 +199,7 @@ class Filter extends Annotation
                 }
             }
         }
+        self::$cache[$reflectionClass->name] = $filterRole;
         return $filterRole;
     }
 }
