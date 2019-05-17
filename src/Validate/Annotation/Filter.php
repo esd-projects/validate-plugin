@@ -168,10 +168,12 @@ class Filter extends Annotation
     {
         $filterRole = self::buildRole($reflectionClass);
         if (!empty($filterRole)) {
-            return Filtration::make($values, $filterRole)->filtering() + $values;
-        } else {
-            return $values;
+            $result = Filtration::make($values, $filterRole)->filtering();
+            foreach ($filterRole as $role) {
+                $values[$role[0]] = $result[$role[0]];
+            }
         }
+        return $values;
     }
 
     /**
