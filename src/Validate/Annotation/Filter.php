@@ -159,13 +159,14 @@ class Filter extends Annotation
 
 
     /**
-     * @param ReflectionClass $reflectionClass
+     * @param ReflectionClass|string $reflectionClass
      * @param $values
      * @return array
      * @throws DependencyException
      * @throws \DI\NotFoundException
+     * @throws \ReflectionException
      */
-    public static function filter(ReflectionClass $reflectionClass, $values)
+    public static function filter($reflectionClass, $values)
     {
         $filterRole = self::buildRole($reflectionClass);
         if (!empty($filterRole)) {
@@ -178,14 +179,21 @@ class Filter extends Annotation
     }
 
     /**
-     * @param ReflectionClass $reflectionClass
+     * @param ReflectionClass|string $reflectionClass
      * @return array
      * @throws DependencyException
      * @throws \DI\NotFoundException
      * @throws \DI\DependencyException
+     * @throws \ReflectionException
      */
-    public static function buildRole(ReflectionClass $reflectionClass)
+    public static function buildRole($reflectionClass)
     {
+        if (is_string($reflectionClass)) {
+            if (array_key_exists($reflectionClass, self::$cache)) {
+                return self::$cache[$reflectionClass];
+            }
+            $reflectionClass = new ReflectionClass($reflectionClass);
+        }
         if (array_key_exists($reflectionClass->name, self::$cache)) {
             return self::$cache[$reflectionClass->name];
         }

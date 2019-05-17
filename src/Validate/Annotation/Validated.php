@@ -314,13 +314,14 @@ class Validated extends Annotation
     }
 
     /**
-     * @param ReflectionClass $reflectionClass
+     * @param ReflectionClass|string $reflectionClass
      * @param $values
      * @throws ValidationException
      * @throws DependencyException
      * @throws \DI\NotFoundException
+     * @throws \ReflectionException
      */
-    public static function valid(ReflectionClass $reflectionClass, $values)
+    public static function valid($reflectionClass, $values)
     {
         $validRole = self::buildRole($reflectionClass);
         if (!empty($validRole)) {
@@ -332,13 +333,20 @@ class Validated extends Annotation
     }
 
     /**
-     * @param ReflectionClass $reflectionClass
+     * @param ReflectionClass|string $reflectionClass
      * @return array
      * @throws DependencyException
      * @throws \DI\NotFoundException
+     * @throws \ReflectionException
      */
-    public static function buildRole(ReflectionClass $reflectionClass)
+    public static function buildRole($reflectionClass)
     {
+        if (is_string($reflectionClass)) {
+            if (array_key_exists($reflectionClass, self::$cache)) {
+                return self::$cache[$reflectionClass];
+            }
+            $reflectionClass = new ReflectionClass($reflectionClass);
+        }
         if (array_key_exists($reflectionClass->name, self::$cache)) {
             return self::$cache[$reflectionClass->name];
         }
