@@ -353,6 +353,8 @@ class Validated extends Annotation
     /**
      * @param ReflectionClass|string $reflectionClass
      * @param $values
+     * @param array $roles
+     * @param array $messages
      * @param array $translates
      * @param string $scene
      * @throws DependencyException
@@ -360,11 +362,12 @@ class Validated extends Annotation
      * @throws \DI\NotFoundException
      * @throws \ReflectionException
      */
-    public static function valid($reflectionClass, $values, $translates = [], $scene = "")
+    public static function valid($reflectionClass, $values, $roles = [], $messages = [], $translates = [], $scene = "")
     {
-        $validRole = self::buildRole($reflectionClass);
+        $validRole = self::buildRole($reflectionClass, $roles);
         if (!empty($validRole)) {
             $validation = Validation::check($values, $validRole, $translates, $scene);
+            $validation->setMessages($messages);
             if ($validation->failed()) {
                 throw new ValidationException($validation->firstError());
             }
@@ -373,12 +376,13 @@ class Validated extends Annotation
 
     /**
      * @param ReflectionClass|string $reflectionClass
+     * @param array $roles
      * @return array
      * @throws DependencyException
      * @throws \DI\NotFoundException
      * @throws \ReflectionException
      */
-    public static function buildRole($reflectionClass)
+    public static function buildRole($reflectionClass, $roles = [])
     {
         if (is_string($reflectionClass)) {
             if (array_key_exists($reflectionClass, self::$cache)) {
@@ -399,6 +403,6 @@ class Validated extends Annotation
             }
         }
         self::$cache[$reflectionClass->name] = $validRole;
-        return $validRole;
+        return array_merge($validRole, $roles);
     }
 }
