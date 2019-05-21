@@ -25,11 +25,6 @@ class Filter extends Annotation
 {
     protected static $cache = [];
     /**
-     * 默认值
-     * @var mixed
-     */
-    public $default;
-    /**
      * 返回绝对值
      * @var bool
      */
@@ -199,11 +194,13 @@ class Filter extends Annotation
         }
         $filterRole = [];
         foreach ($reflectionClass->getProperties() as $property) {
-            $filter = Server::$instance->getContainer()->get(CachedReader::class)->getPropertyAnnotation($property, Filter::class);
-            if ($filter instanceof Filter) {
-                $one = $filter->build($property->name);
-                if (!empty($one)) {
-                    $filterRole[] = $one;
+            $filters = Server::$instance->getContainer()->get(CachedReader::class)->getPropertyAnnotations($property);
+            foreach ($filters as $filter) {
+                if ($filter instanceof Filter) {
+                    $one = $filter->build($property->name);
+                    if (!empty($one)) {
+                        $filterRole[] = $one;
+                    }
                 }
             }
         }

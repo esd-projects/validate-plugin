@@ -357,6 +357,7 @@ class Validated extends Annotation
      * @param array $messages
      * @param array $translates
      * @param string $scene
+     * @return array|\stdClass
      * @throws DependencyException
      * @throws ValidationException
      * @throws \DI\NotFoundException
@@ -371,7 +372,9 @@ class Validated extends Annotation
             if ($validation->failed()) {
                 throw new ValidationException($validation->firstError());
             }
+            return $validation->getSafeData();
         }
+        return $values;
     }
 
     /**
@@ -395,10 +398,12 @@ class Validated extends Annotation
         }
         $validRole = [];
         foreach ($reflectionClass->getProperties() as $property) {
-            $validated = Server::$instance->getContainer()->get(CachedReader::class)->getPropertyAnnotation($property, Validated::class);
-            if ($validated instanceof Validated) {
-                foreach ($validated->build($property->name) as $one) {
-                    $validRole[] = $one;
+            $validateds = Server::$instance->getContainer()->get(CachedReader::class)->getPropertyAnnotations($property);
+            foreach ($validateds as $validated) {
+                if ($validated instanceof Validated) {
+                    foreach ($validated->build($property->name) as $one) {
+                        $validRole[] = $one;
+                    }
                 }
             }
         }
