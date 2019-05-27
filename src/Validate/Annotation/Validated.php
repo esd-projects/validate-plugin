@@ -11,7 +11,7 @@ namespace ESD\Plugins\Validate\Annotation;
 use DI\DependencyException;
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\CachedReader;
-use ESD\BaseServer\Server\Server;
+use ESD\Core\Server\Server;
 use ESD\Plugins\Validate\ValidationException;
 use Inhere\Validate\Validation;
 use ReflectionClass;
@@ -398,7 +398,7 @@ class Validated extends Annotation
         }
         $validRole = [];
         foreach ($reflectionClass->getProperties() as $property) {
-            $validateds = Server::$instance->getContainer()->get(CachedReader::class)->getPropertyAnnotations($property);
+            $validateds = DIget(CachedReader::class)->getPropertyAnnotations($property);
             foreach ($validateds as $validated) {
                 if ($validated instanceof Validated) {
                     foreach ($validated->build($property->name) as $one) {

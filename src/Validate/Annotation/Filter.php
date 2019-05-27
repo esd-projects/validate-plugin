@@ -12,7 +12,6 @@ namespace ESD\Plugins\Validate\Annotation;
 use DI\DependencyException;
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\CachedReader;
-use ESD\BaseServer\Server\Server;
 use Inhere\Validate\Filter\Filtration;
 use ReflectionClass;
 
@@ -194,7 +193,7 @@ class Filter extends Annotation
         }
         $filterRole = [];
         foreach ($reflectionClass->getProperties() as $property) {
-            $filters = Server::$instance->getContainer()->get(CachedReader::class)->getPropertyAnnotations($property);
+            $filters = DIget(CachedReader::class)->getPropertyAnnotations($property);
             foreach ($filters as $filter) {
                 if ($filter instanceof Filter) {
                     $one = $filter->build($property->name);

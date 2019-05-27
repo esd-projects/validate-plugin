@@ -9,9 +9,9 @@
 namespace ESD\Plugins\Validate;
 
 
-use ESD\BaseServer\Server\Context;
-use ESD\BaseServer\Server\PlugIn\AbstractPlugin;
-use ESD\BaseServer\Server\PlugIn\PluginInterfaceManager;
+use ESD\Core\Context\Context;
+use ESD\Core\Plugin\AbstractPlugin;
+use ESD\Core\Plugin\PluginInterfaceManager;
 use ESD\Plugins\AnnotationsScan\AnnotationsScanPlugin;
 use ESD\Plugins\Validate\Annotation\Validated;
 
@@ -32,7 +32,7 @@ class ValidatePlugin extends AbstractPlugin
      * @param PluginInterfaceManager $pluginInterfaceManager
      * @return mixed|void
      * @throws \DI\DependencyException
-     * @throws \ESD\BaseServer\Exception
+     * @throws \ESD\Core\Exception
      * @throws \ReflectionException
      */
     public function onAdded(PluginInterfaceManager $pluginInterfaceManager)
@@ -53,7 +53,6 @@ class ValidatePlugin extends AbstractPlugin
     /**
      * 初始化
      * @param Context $context
-     * @return mixed
      */
     public function beforeServerStart(Context $context)
     {
@@ -63,7 +62,6 @@ class ValidatePlugin extends AbstractPlugin
     /**
      * 在进程启动前
      * @param Context $context
-     * @return mixed
      */
     public function beforeProcessStart(Context $context)
     {

@@ -9,7 +9,7 @@
 namespace ESD\Plugins\Validate;
 
 
-use ESD\BaseServer\Exception;
+use ESD\Core\Exception;
 use Throwable;
 
 class ValidationException extends Exception
