@@ -22,10 +22,8 @@ class ValidatedFilter
      * @param array $translates
      * @param string $scene
      * @return array|\stdClass
-     * @throws \DI\NotFoundException
-     * @throws \ReflectionException
-     * @throws \DI\DependencyException
      * @throws ValidationException
+     * @throws \ReflectionException
      */
     public static function valid($reflectionClass, $values, $roles = [], $messages = [], $translates = [], $scene = "")
     {

@@ -9,7 +9,6 @@
 namespace ESD\Plugins\Validate\Annotation;
 
 
-use DI\DependencyException;
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\CachedReader;
 use Inhere\Validate\Filter\Filtration;
@@ -156,8 +155,6 @@ class Filter extends Annotation
      * @param ReflectionClass|string $reflectionClass
      * @param $values
      * @return array
-     * @throws DependencyException
-     * @throws \DI\NotFoundException
      * @throws \ReflectionException
      */
     public static function filter($reflectionClass, $values)
@@ -175,9 +172,6 @@ class Filter extends Annotation
     /**
      * @param ReflectionClass|string $reflectionClass
      * @return array
-     * @throws DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \DI\DependencyException
      * @throws \ReflectionException
      */
     public static function buildRole($reflectionClass)

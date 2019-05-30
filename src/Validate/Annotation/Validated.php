@@ -358,10 +358,7 @@ class Validated extends Annotation
      * @param array $translates
      * @param string $scene
      * @return array|\stdClass
-     * @throws DependencyException
      * @throws ValidationException
-     * @throws \DI\NotFoundException
-     * @throws \ReflectionException
      */
     public static function valid($reflectionClass, $values, $roles = [], $messages = [], $translates = [], $scene = "")
     {
