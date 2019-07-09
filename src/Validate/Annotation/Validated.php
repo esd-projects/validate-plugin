@@ -404,7 +404,7 @@ class Validated extends Annotation
                 }
             }
         }
-        self::$cache[$reflectionClass->name] = $validRole;
-        return array_merge($validRole, $roles);
+        self::$cache[$reflectionClass->name] = array_merge($validRole, $roles);
+        return self::$cache[$reflectionClass->name];
     }
 }
